@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const MongoClient = require("mongodb").MongoClient;
 
+const app = express();
+
 var db;
 MongoClient.connect(
   "mongodb://pajamacat:zxx25@ds111618.mlab.com:11618/pajamacat",
@@ -16,7 +18,6 @@ MongoClient.connect(
   }
 );
 app.set('view engine', 'ejs')
-const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
