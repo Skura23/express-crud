@@ -11,13 +11,19 @@
 <body>
   <h1>hello world</h1>
   <p>
-    {{a}}
+    {{foo}}
   </p>
   <form action="/quotes" method="POST">
     <input type="text" placeholder="name" name="name">
     <input type="text" placeholder="quote" name="quote">
     <button type="submit">Submit</button>
   </form>
+  <br>
+  <ul class="quotes">
+    {{#each result}}
+    <li>{{this.name}} : {{this.quote}}</li>
+    {{/each}}
+  </ul>
 </body>
 
 </html>

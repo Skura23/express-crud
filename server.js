@@ -1,9 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
+const exphbs  = require('express-handlebars');
 const app = express();
+
+app.engine('.hbs', exphbs({
+  layoutsDir: 'views',
+  defaultLayout: 'index',
+  extname: '.hbs',
+  // helpers:hbsHelper
+}));
+app.set('view engine', '.hbs');
 app.use(bodyParser.urlencoded({extended: true}))
-app.set('view engine', 'hbs')
+
+
 
 var db;
 MongoClient.connect('mongodb://pajamacat:zxx25@ds111618.mlab.com:11618/pajamacat', (err, client)=>{
@@ -22,7 +32,7 @@ app.get('/', function (req, res) {
     if (err) {
       return console.log(err);
     }
-    res.render('index.hbs', {'a':'foo'})
+    res.render('index.hbs',{foo: 123, result: result})
     console.log(result);
   })
   // res.sendFile(__dirname+'/index.html')
