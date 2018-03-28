@@ -6,24 +6,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
-  <h1>hello world</h1>
-  <p>
-    {{foo}}
-  </p>
-  <form action="/quotes" method="POST">
-    <input type="text" placeholder="name" name="name">
-    <input type="text" placeholder="quote" name="quote">
-    <button type="submit">Submit</button>
-  </form>
-  <br>
-  <ul class="quotes">
-    {{#each result}}
-    <li>{{this.name}} : {{this.quote}}</li>
-    {{/each}}
-  </ul>
+  <div id="app">
+    <h1>hello world</h1>
+    <p>
+      {{foo}},\{{message}}
+    </p>
+    <div v-text="{{foo}}+123"></div>
+    <form action="/quotes" method="POST">
+      <input type="text" placeholder="name" name="name">
+      <input type="text" placeholder="quote" name="quote">
+      <button type="submit">Submit</button>
+    </form>
+    <br>
+    <ul class="quotes">
+      {{#each result}}
+      <li>{{this.name}} : 
+        <quote-editor :quote = "'{{this.quote}}'">
+        </quote-editor>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+
+  <script type="text/x-template" id="quote-editor-template">
+    <div>
+      <input type="text" v-show="edittingFlag" v-model="inpQuote">
+      <span v-show="!edittingFlag" v-text="quote_"></span>
+      <button @click = "quoteHandler" v-text="editStatus"></button>
+    </div>
+  </script>
+
+  <script>
+    var QuoteEditor = {
+      template: '#quote-editor-template',
+      // 组件与父组件有联系的变量 prop
+      props: ['quote'],
+      // 组件私有变量
+      data(){
+        return {
+          edittingFlag: false,
+          quote_: this.quote,
+          inpQuote: ''
+        }
+      },
+      methods:{
+        quoteHandler(){
+          if(!this.edittingFlag){
+            this.inpQuote = this.quote_;
+          }else{
+            this.quote_ = this.inpQuote;
+          }
+          this.edittingFlag = this.edittingFlag ? false : true;
+        }
+      },
+      computed: {
+        editStatus(){
+          return this.edittingFlag ? '完成':'修改'
+        }
+      }
+    }
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!'
+      },
+      methods: {
+        
+      },
+      components:{
+        'quote-editor':QuoteEditor
+      }
+    })
+  </script>
 </body>
 
 </html>
